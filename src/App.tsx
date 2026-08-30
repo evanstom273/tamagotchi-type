@@ -1,23 +1,28 @@
 import { useState } from 'react';
 import { ActionBar } from './components/ActionBar';
 import { EventMessage } from './components/EventMessage';
+import { GameDrawer } from './components/GameDrawer';
 import { Pet } from './components/Pet';
 import { PetRoom } from './components/PetRoom';
-import { StatusBar } from './components/StatusBar';
 import { usePet } from './hooks/usePet';
 import { useTheme } from './hooks/useTheme';
 import { useWorldLighting } from './hooks/useWorldLighting';
-import { ThemeControl } from './components/ThemeControl';
+import { getMood, moodCopy } from './game/personality';
 import './App.css';
 import './theme.css';
 import './responsive.css';
+
+function DrawerIcon() { return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>; }
 
 function App() {
   const { pet, message, start, feed, play, clean, toggleSleep } = usePet();
   const { preference, setPreference } = useTheme();
   const lighting = useWorldLighting();
   const [name, setName] = useState('');
-  if (!pet) return <main className="welcome"><div className="welcome__mark"><span/><span/><span/></div><p className="eyebrow">Pocket Pals · v0.1</p><h1>A tiny room<br/><em>for a tiny friend.</em></h1><p className="welcome__copy">Name your new companion. They’ll be waiting in their room whenever you come back.</p><form onSubmit={(event) => { event.preventDefault(); start(name); }}><label htmlFor="pet-name">What should we call them?</label><div className="name-input"><input id="pet-name" value={name} onChange={(event) => setName(event.target.value)} maxLength={18} placeholder="Mochi" autoFocus/><button type="submit">Bring them home <span>→</span></button></div></form><div className="welcome__note"><span className="note-dot"/> All progress is saved on this device</div></main>;
-  return <main className="app-shell"><header className="topbar"><div className="brand"><span className="brand__dot"/><span>Pocket Pals</span><small>v0.1</small></div><div className="topbar__right"><span className="save-state"><span/>Saved locally</span><ThemeControl preference={preference} onChange={setPreference}/><button className="reset" onClick={() => { localStorage.removeItem('pocket-pals-pet-v1'); window.location.reload(); }}>New pal</button></div></header><div className="game-layout"><section className="play-area"><div className="play-area__intro"><p className="eyebrow">A little world, all yours</p><h1>{pet.name}<span className="heart">♥</span></h1></div><div className="room-wrap"><PetRoom pet={pet} lighting={lighting}/><Pet pet={pet}/></div><EventMessage message={message}/></section><section className="control-area"><StatusBar pet={pet}/><ActionBar onFeed={feed} onPlay={play} onClean={clean} onSleep={toggleSleep} sleeping={pet.isSleeping}/><p className="tip">Tip: needs drift while you’re away, too.</p></section></div><footer className="footer"><span>Look after your pal a little each day.</span><span className="footer__paw">● · ●</span></footer></main>;
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  if (!pet) return <main className="welcome"><div className="welcome__mark"><span /><span /><span /></div><p className="eyebrow">Pocket Pals · v0.1</p><h1>A tiny room<br /><em>for a tiny friend.</em></h1><p className="welcome__copy">Name your new companion. They’ll be waiting in their room whenever you come back.</p><form onSubmit={(event) => { event.preventDefault(); start(name); }}><label htmlFor="pet-name">What should we call them?</label><div className="name-input"><input id="pet-name" value={name} onChange={(event) => setName(event.target.value)} maxLength={18} placeholder="Mochi" autoFocus /><button type="submit">Bring them home <span aria-hidden="true">→</span></button></div></form><div className="welcome__note"><span className="note-dot" /> All progress is saved on this device</div></main>;
+  const mood = getMood(pet);
+  return <main className="game-screen"><section className="room-stage" aria-label="Pocket Pals room"><PetRoom pet={pet} lighting={lighting} /><Pet pet={pet} /><div className="game-hud game-hud--identity"><span className="hud-name">{pet.name}</span><span className="hud-meta">{moodCopy[mood].label} · Day {Math.max(1, Math.floor(pet.age) + 1)}</span></div><div className="game-hud game-hud--world"><span className="hud-signal" />{lighting.label}</div><EventMessage message={message} /><button className="drawer-trigger" aria-label={drawerOpen ? 'Close game drawer' : 'Open game drawer'} aria-expanded={drawerOpen} onClick={() => setDrawerOpen((open) => !open)}><DrawerIcon /></button></section><section className="action-dock" aria-label="Primary interactions"><ActionBar onFeed={feed} onPlay={play} onClean={clean} onSleep={toggleSleep} sleeping={pet.isSleeping} /></section><GameDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} pet={pet} preference={preference} onThemeChange={setPreference} onNewPal={() => { localStorage.removeItem('pocket-pals-pet-v1'); window.location.reload(); }} /></main>;
 }
+
 export default App;
