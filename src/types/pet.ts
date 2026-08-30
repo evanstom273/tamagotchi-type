@@ -11,12 +11,19 @@ export interface PetNeeds {
   nutrition: number;
 }
 
+export interface PetSchedule {
+  bedtime: string;
+  wakeTime: string;
+}
+
 export interface PetState {
   name: string;
   age: number;
   needs: PetNeeds;
   health: number;
   isSleeping: boolean;
+  schedule: PetSchedule;
+  scheduleOverrideUntil?: number;
   lastUpdatedAt: number;
 }
 

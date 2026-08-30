@@ -23,5 +23,5 @@ export function clean(pet: PetState): PetActionResult {
 export function toggleSleep(pet: PetState): PetActionResult {
   const current = progressPet(pet);
   const sleeping = !current.isSleeping;
-  return ready({ ...current, isSleeping: sleeping }, sleeping ? `${current.name} curled up for a nap.` : `${current.name} woke up refreshed.`);
+  return ready({ ...current, isSleeping: sleeping, scheduleOverrideUntil: sleeping ? undefined : Date.now() + 2 * 3_600_000 }, sleeping ? `${current.name} curled up for a nap.` : `${current.name} woke up refreshed.`);
 }

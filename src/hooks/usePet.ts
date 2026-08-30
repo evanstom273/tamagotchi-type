@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { feed, play, clean, toggleSleep } from '../game/actions';
 import { progressPet, createPet } from '../game/simulation';
 import type { PetState } from '../types/pet';
-import { INITIAL_HEALTH, INITIAL_NEEDS } from '../game/constants';
+import { DEFAULT_SCHEDULE, INITIAL_HEALTH, INITIAL_NEEDS } from '../game/constants';
+import type { PetSchedule } from '../types/pet';
 
 const STORAGE_KEY = 'pocket-pals-pet-v1';
 
@@ -21,6 +22,7 @@ function migratePet(saved: Partial<PetState> & Record<string, unknown>): PetStat
     },
     health: typeof saved.health === 'number' ? saved.health : INITIAL_HEALTH,
     isSleeping: saved.isSleeping === true,
+    schedule: { ...DEFAULT_SCHEDULE, ...(saved.schedule as Partial<PetSchedule> | undefined) },
     lastUpdatedAt: typeof saved.lastUpdatedAt === 'number' ? saved.lastUpdatedAt : Date.now(),
   };
 }
@@ -42,5 +44,6 @@ export function usePet() {
 
   const start = useCallback((name: string) => { setPet(createPet(name)); setMessage(`Welcome home, ${name.trim() || 'Mochi'}!`); }, []);
   const act = useCallback((action: (state: PetState) => { state: PetState; message: string }) => setPet((current) => { if (!current) return current; const result = action(current); setMessage(result.message); return result.state; }), []);
-  return { pet, message, start, feed: () => act(feed), play: () => act(play), clean: () => act(clean), toggleSleep: () => act(toggleSleep) };
+  const setSchedule = useCallback((schedule: PetSchedule) => setPet((current) => current ? { ...current, schedule } : current), []);
+  return { pet, message, start, feed: () => act(feed), play: () => act(play), clean: () => act(clean), toggleSleep: () => act(toggleSleep), setSchedule };
 }

@@ -1,4 +1,9 @@
 /* Shape-aware composition lives in App.css; this file keeps the scene legible on very short windows. */
+.app-topbar { position:absolute; z-index:7; top:0; left:0; right:0; height:clamp(46px,7vh,58px); display:flex; align-items:center; justify-content:space-between; padding:0 clamp(14px,3vw,38px); border-bottom:1px solid rgba(235,218,202,.24); background:#30312f; color:#f4e6d5; }
+.topbar-pet { display:flex; align-items:baseline; gap:9px; min-width:0; }.topbar-pet strong { font-size:clamp(15px,2vw,20px); letter-spacing:-.04em; }.topbar-pet span,.app-topbar time { color:#bba69b; font:10px 'DM Mono',monospace; white-space:nowrap; }.app-topbar time { font-size:clamp(12px,1.5vw,15px); color:#f4e6d5; }
+.action-dock { border-top:0; }.actions { width:min(100%,620px); grid-template-columns:repeat(5,minmax(0,1fr)); }.action--menu .action__art { color:#f4e6d5; background:#5a5b56; }
+.schedule-copy { margin:8px 0 14px; color:var(--muted); font-size:12px; line-height:1.45; }.schedule-fields { display:grid; grid-template-columns:1fr 1fr; gap:10px; }.schedule-fields label { display:grid; gap:6px; color:var(--muted); font:10px 'DM Mono',monospace; }.schedule-fields input { width:100%; padding:9px 8px; border:1px solid var(--line); border-radius:8px; background:rgba(255,255,255,.35); color:var(--ink); }
+@media (max-width:560px) { .app-topbar { height:46px; padding-inline:14px; }.topbar-pet { gap:6px; }.topbar-pet strong { font-size:15px; }.topbar-pet span,.app-topbar time { font-size:9px; }.room-canvas { top:46px; }.actions { gap:4px; }.action { min-height:54px; padding-inline:2px; }.action__art { width:21px; height:21px; }.action > span:last-child { font-size:9px; } }
 @media (max-height: 480px) and (min-width: 700px) {
   .room-stage { inset-bottom: 62px; }
   .game-hud { padding-block: 7px; }
