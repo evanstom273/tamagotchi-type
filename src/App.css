@@ -24,7 +24,7 @@ button,input { font:inherit; } button { cursor:pointer; }
 .pet--behavior-resting,.pet--behavior-sleeping { transition-timing-function:ease-out; }
 .pet-interaction-overlay { position:absolute; z-index:5; left:50%; bottom:13%; width:clamp(180px,min(36vw,47vh),430px); transform:translateX(-50%); transition:left 1.1s ease-in-out; touch-action:none; }
 .pet-interaction-overlay svg { display:block; width:100%; overflow:visible; }
-.pet-hit-regions { fill:transparent; stroke:transparent; pointer-events:all; }
+.pet-hit-regions,.pet-hit-regions * { fill:transparent !important; stroke:transparent !important; pointer-events:all; }
 .pet-hit-regions g { cursor:pointer; outline:none; }
 .pet-hit-regions g:focus-visible { stroke:var(--coral); stroke-width:3; }
 .pet svg { display:block; width:100%; overflow:visible; }
