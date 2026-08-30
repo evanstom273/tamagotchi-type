@@ -1,0 +1,57 @@
+/* Layout is based on available space and shape, not device names. */
+html, body, #root { min-height: 100%; overflow-x: hidden; }
+.app-shell { width: min(100%, 1600px); padding-inline: max(18px, env(safe-area-inset-left), clamp(18px, 4vw, 64px)); padding-right: max(18px, env(safe-area-inset-right), clamp(18px, 4vw, 64px)); }
+.game-layout { grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr); gap: clamp(26px, 5vw, 72px); }
+.play-area, .control-area { min-width: 0; }
+.room-wrap { width: 100%; max-width: none; min-height: 0; aspect-ratio: 800 / 460; }
+.room { width: 100%; height: auto; aspect-ratio: 800 / 460; }
+.room__art { aspect-ratio: 800 / 460; }
+.needs-heading { display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px; color: var(--muted); }
+.needs-heading .eyebrow { margin: 0; color: var(--ink); }
+.needs-heading > span:last-child { font: 9px 'DM Mono'; }
+.needs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(12px, 2vw, 22px); row-gap: 1px; }
+.need { min-width: 0; padding: 7px 0; }
+.need__top { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 5px; color: var(--muted); font: 10px 'DM Mono'; }
+.need__top span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.need__top strong { color: var(--ink); font-weight: 500; }
+.need__track { height: 5px; overflow: hidden; border-radius: 5px; background: color-mix(in srgb, var(--line) 75%, transparent); }
+.need__fill { height: 100%; min-width: 2px; border-radius: inherit; transition: width .45s ease; }
+.need__fill--peach { background: var(--peach); }.need__fill--lilac { background: #9a9bca; }.need__fill--blue { background: var(--blue); }.need__fill--yellow { background: var(--yellow); }.need__fill--sage { background: var(--sage); }.need__fill--coral { background: var(--coral); }.need__fill--rose { background: #d9939d; }.need__fill--ochre { background: #c99c58; }
+.actions { grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); }
+.action { min-width: 0; min-height: 48px; }
+.action__art { flex: 0 0 24px; }
+
+@media (max-width: 760px) and (min-aspect-ratio: 1.15/1) {
+  .app-shell { padding-top: 12px; padding-bottom: 12px; }
+  .topbar { padding-bottom: 10px; }
+  .game-layout { grid-template-columns: minmax(0, 1.55fr) minmax(268px, .8fr); gap: 24px; padding: 17px 0 12px; align-items: start; }
+  .play-area__intro { margin-bottom: 9px; }.play-area h1 { font-size: clamp(28px, 5vw, 38px); }
+  .room-wrap, .room { min-height: 0; height: auto; }
+  .control-area { padding-top: 6px; }.mood { padding: 10px 0 12px; }.stats { padding-top: 7px; }
+  .needs-heading { margin-top: 8px; }.need { padding: 4px 0; }.actions { margin-top: 12px; }.tip { display: none; }.footer { padding-top: 8px; }
+}
+
+@media (max-width: 760px) and (max-aspect-ratio: 1.15/1) {
+  .app-shell { padding-top: max(18px, env(safe-area-inset-top)); padding-bottom: max(18px, env(safe-area-inset-bottom)); }
+  .game-layout { display: flex; flex-direction: column; gap: 0; padding-top: 22px; align-items: stretch; }
+  .room-wrap, .room { min-height: 0; height: auto; }
+  .play-area__intro { margin-bottom: 12px; }.play-area h1 { font-size: clamp(32px, 9vw, 42px); }
+  .control-area { padding-top: 24px; }.needs-grid { column-gap: 20px; }.need { padding-block: 6px; }
+  .actions { gap: 8px; margin-top: 18px; }.action { min-height: 52px; padding: 6px 4px; gap: 6px; }
+  .tip { margin-top: 13px; }.footer { margin-top: 18px; }
+}
+
+@media (min-width: 761px) and (max-width: 1100px) {
+  .app-shell { padding-inline: clamp(22px, 4vw, 42px); }.game-layout { grid-template-columns: minmax(0, 1.15fr) minmax(286px, .85fr); gap: clamp(22px, 4vw, 42px); }
+  .control-area { padding-top: 18px; }.needs-grid { column-gap: 14px; }.need { padding-block: 5px; }
+}
+
+@media (min-width: 761px) and (max-height: 700px) {
+  .app-shell { padding-top: 16px; padding-bottom: 12px; }.topbar { padding-bottom: 12px; }.game-layout { padding-block: 18px 12px; }.play-area__intro { margin-bottom: 8px; }.play-area h1 { font-size: clamp(30px, 4vw, 40px); }.control-area { padding-top: 0; }.mood { padding-block: 11px; }.needs-heading { margin-top: 8px; }.need { padding-block: 4px; }.actions { margin-top: 14px; }.tip { margin-top: 10px; }.footer { padding-top: 8px; }
+}
+
+@media (max-width: 410px) {
+  .app-shell { padding-inline: 14px; }.topbar__right { gap: 12px; }.brand { font-size: 16px; }.brand small { display: none; }.reset { font-size: 11px; }.room__label { right: 5%; }.room__label h2 { font-size: 11px; }.needs-grid { column-gap: 12px; }.need__top { font-size: 9px; }.actions { gap: 5px; }.action { font-size: 11px; }.action__art { flex-basis: 20px; width: 20px; height: 20px; }.action__art svg { width: 16px; height: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) { .need__fill { transition: none; } }

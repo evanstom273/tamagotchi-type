@@ -10,6 +10,7 @@ import { useWorldLighting } from './hooks/useWorldLighting';
 import { ThemeControl } from './components/ThemeControl';
 import './App.css';
 import './theme.css';
+import './responsive.css';
 
 function App() {
   const { pet, message, start, feed, play, clean, toggleSleep } = usePet();

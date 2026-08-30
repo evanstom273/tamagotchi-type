@@ -2,11 +2,11 @@ import type { Mood, PetState } from '../types/pet';
 
 export function getMood(pet: PetState): Mood {
   if (pet.health < 38) return 'unwell';
-  if (pet.hygiene < 30) return 'dirty';
-  if (pet.energy < 25) return 'tired';
-  if (pet.hunger < 28) return 'hungry';
-  if (pet.happiness < 35) return 'sad';
-  if (pet.happiness > 78 && pet.health > 75) return 'happy';
+  if (pet.needs.hygiene < 30) return 'dirty';
+  if (pet.needs.sleep < 25) return 'tired';
+  if (pet.needs.hunger < 28 || pet.needs.nutrition < 28) return 'hungry';
+  if (pet.needs.social < 35 || pet.needs.fun < 35 || pet.needs.affection < 35) return 'sad';
+  if (pet.needs.fun > 78 && pet.needs.affection > 72 && pet.health > 75) return 'happy';
   return 'content';
 }
 
