@@ -1,0 +1,20 @@
+{
+  "name": "Pocket Pals — Virtual Pet",
+  "short_name": "Pocket Pals",
+  "description": "A tiny room for a tiny friend.",
+  "start_url": ".",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fbf6ee",
+  "theme_color": "#fbf6ee",
+  "icons": [
+    {
+      "src": "pocket-pals.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
