@@ -1,8 +1,9 @@
-const CACHE_NAME = 'pocket-pals-v1';
+const CACHE_NAME = 'pocket-pals-v2';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './favicon.svg', './pwa-icon.svg'];
+const scopedUrl = (path) => new URL(path, self.registration.scope).toString();
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL.map(scopedUrl))));
   self.skipWaiting();
 });
 
@@ -25,6 +26,6 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
       }
       return response;
-    }).catch(() => caches.match('./index.html'))),
+    }).catch(() => caches.match(scopedUrl('./index.html')))),
   );
 });
