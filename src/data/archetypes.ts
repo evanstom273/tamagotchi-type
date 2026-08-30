@@ -24,3 +24,26 @@ export const ARCHETYPES: ArchetypeDefinition[] = [
   { id:'robot',label:'Robot',family:'Sci-fi',palettes:['#89949d','#a9a08b','#78949b'],accents:['#ef896f','#e6c56e','#89d2c4'],habitatStrong:['workshop','space-station','futuristic-apartment','research-lab'],habitatCompatible:['spaceship','lunar-habitat','mountain-workshop'],shape:'robot' },
 ];
 export const getArchetype = (id: PetArchetype) => ARCHETYPES.find((item) => item.id === id) ?? ARCHETYPES[0];
+
+export const STRUCTURAL_TRAITS: Record<PetArchetype, { bodies: string[]; heads: string[]; limbs: string[]; appendages: string[]; tails: string[] }> = {
+  dog:{bodies:['round','long','tall','chunky','small'],heads:['soft','long','broad'],limbs:['short','medium','long'],appendages:['floppy','upright','mixed'],tails:['curved','wagging','short','plumed']},
+  cat:{bodies:['round','slender','compact','fluffy','long'],heads:['round','wedge','broad'],limbs:['short','medium','long'],appendages:['pointed','tufted','folded'],tails:['long','curl','plume','short']},
+  rabbit:{bodies:['round','slender','compact'],heads:['soft','small','broad'],limbs:['short','medium','powerful'],appendages:['long','short','lop','mixed'],tails:['tiny','round','fluffy']},
+  bear:{bodies:['massive','round','small','tall'],heads:['large','broad','small'],limbs:['thick','short','long'],appendages:['round','small','tufted'],tails:['tiny','short']},
+  fox:{bodies:['slender','long','compact','fluffy'],heads:['sharp','broad','small'],limbs:['long','medium','short'],appendages:['large','upright','tufted'],tails:['huge','brush','curved','short']},
+  bird:{bodies:['round','slender','pear','compact'],heads:['small','round','crest'],limbs:['short','long','perched'],appendages:['crest','none','fan'],tails:['feathers','fan','short','split']},
+  frog:{bodies:['squat','tall','wide','round'],heads:['wide','small','stalked'],limbs:['long','short','webbed'],appendages:['eye-stalks','none','frill'],tails:['none']},
+  turtle:{bodies:['high-shell','flat-shell','round-shell'],heads:['long-neck','small','broad'],limbs:['flipper','stout','long'],appendages:['shell-ridge','none','spikes'],tails:['short','pointed']},
+  axolotl:{bodies:['long','round','tiny'],heads:['broad','small','flat'],limbs:['tiny','medium','long'],appendages:['branch-gills','fan-gills','frill-gills'],tails:['fin','long','ribbon']},
+  bat:{bodies:['fluffy','slender','round'],heads:['small','broad','long'],limbs:['tiny','clawed','long'],appendages:['wide-wings','tall-wings','short-wings'],tails:['none','short']},
+  dinosaur:{bodies:['theropod','quadruped','horned','plated','crested','long-neck'],heads:['snout','frill','beaked'],limbs:['tiny-arms','stout','long'],appendages:['horns','plates','crest','spikes'],tails:['long','club','feathered']},
+  dragon:{bodies:['biped','quadruped','serpentine','round'],heads:['snout','broad','frilled'],limbs:['stout','tiny','long'],appendages:['horns','wings','frill','spines'],tails:['whip','arrow','fluffy','club']},
+  monster:{bodies:['round','tall','wide','odd','squat'],heads:['one-eyed','many-eyed','tiny','huge'],limbs:['none','two','four','tentacle'],appendages:['horns','ears','spikes','none'],tails:['none','long','split','tufted']},
+  blob:{bodies:['puddle','droplet','tall-jelly','wide-jelly','lobed','pear'],heads:['embedded','top-eye','face-band'],limbs:['pseudopod','tentacle','none'],appendages:['stalks','horns','none'],tails:['none','drip','ribbon']},
+  ghost:{bodies:['wisp','round','tall','wide'],heads:['integrated','floating','small'],limbs:['none','spectral-arms','wisps'],appendages:['halo','flicker','none'],tails:['three-wisps','trail','taper']},
+  elemental:{bodies:['flame','droplet','boulder','cloud'],heads:['crown','core','none'],limbs:['flame-arms','stone-limbs','none'],appendages:['sparks','waves','crystals','wisps'],tails:['flare','stream','smoke','none']},
+  mushroom:{bodies:['stalk','round-cap','tall-cap','cluster'],heads:['cap-face','low-face','wide-cap'],limbs:['tiny','rooted','short'],appendages:['moss','leaves','spots','sprouts'],tails:['none']},
+  golem:{bodies:['squat-rock','tall-rock','stacked','crystal'],heads:['integrated','stone-head','gem-head'],limbs:['massive','thin','chunky'],appendages:['crystals','moss','cracks','none'],tails:['none','stone-tail']},
+  alien:{bodies:['large-head','round','tall','multi-leg','floating','tentacled','squat'],heads:['dome','wide','small','visor'],limbs:['two','four','many','tentacle','none'],appendages:['antenna','ears','stalks','none'],tails:['none','thin','curled','tendril']},
+  robot:{bodies:['screen-bot','head-torso','round-bot','wheeled','floating-bot','long-legged'],heads:['crt','square-monitor','dome','circular','visor','sensor'],limbs:['short-legs','articulated','wheels','treads','hover','long-legs'],appendages:['none','single-aerial','twin-aerial','dish','sensor-stalk','side-sensors'],tails:['none']},
+};

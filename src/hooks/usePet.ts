@@ -12,8 +12,8 @@ function migratePet(saved: Partial<PetState> & Record<string, unknown>): PetStat
   const oldNeeds = saved.needs as Partial<typeof INITIAL_NEEDS> | undefined;
   const archetype = (saved.archetype as PetArchetype) || 'dog';
   const generationSeed = typeof saved.generationSeed === 'number' ? saved.generationSeed : Date.now() >>> 0;
-  const appearance = saved.appearance && typeof saved.appearance === 'object' ? saved.appearance as PetState['appearance'] : generateAppearance(archetype, generationSeed);
-  const habitat = saved.habitat && typeof saved.habitat === 'object' ? saved.habitat as PetState['habitat'] : generateHabitat(archetype, generationSeed);
+  const appearance = saved.appearance && typeof saved.appearance === 'object' ? { ...generateAppearance(archetype, generationSeed), ...(saved.appearance as Partial<PetState['appearance']>) } : generateAppearance(archetype, generationSeed);
+  const habitat = saved.habitat && typeof saved.habitat === 'object' ? { ...generateHabitat(archetype, generationSeed), ...(saved.habitat as Partial<PetState['habitat']>) } : generateHabitat(archetype, generationSeed);
   return {
     name: typeof saved.name === 'string' ? saved.name : 'Mochi',
     age: typeof saved.age === 'number' ? saved.age : 0,

@@ -16,8 +16,8 @@ export interface PetSchedule {
   bedtime: string;
   wakeTime: string;
 }
-export interface PetAppearance { palette: string; accent: string; eyeStyle: number; bodyVariant: number; marking: number; rareTrait?: string; element?: 'fire' | 'water' | 'earth' | 'air'; }
-export interface HabitatState { archetype: string; seed: number; palette: number; layout: number; variant: number; waypoints: { sleepArea: number; feedArea: number; playArea: number; idleArea: number; viewArea: number }; }
+export interface PetAppearance { palette: string; accent: string; eyeStyle: number; bodyVariant: number; marking: number; headVariant: number; limbVariant: number; appendageVariant: number; tailVariant: number; visualScale: number; bodyFamily: string; headFamily: string; limbFamily: string; appendageFamily: string; tailFamily: string; rareTrait?: string; element?: 'fire' | 'water' | 'earth' | 'air'; }
+export interface HabitatState { archetype: string; seed: number; palette: number; layout: number; variant: number; layoutTemplate: string; objectVariant: number; waypoints: { sleepArea: number; feedArea: number; playArea: number; idleArea: number; viewArea: number }; }
 
 export interface PetState {
   name: string;
