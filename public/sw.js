@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pocket-pals-v4';
+const CACHE_NAME = 'pocket-pals-v5';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './favicon.svg', './pwa-icon.svg'];
 const scopedUrl = (path) => new URL(path, self.registration.scope).toString();
 
