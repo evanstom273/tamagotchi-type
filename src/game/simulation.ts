@@ -1,7 +1,7 @@
 import { clampStat, DEFAULT_SCHEDULE, INITIAL_HEALTH, INITIAL_NEEDS, MS_PER_DAY } from './constants';
 import type { PetState } from '../types/pet';
 import type { PetArchetype } from '../types/pet';
-import { generateAppearance, generateHabitat } from './generation';
+import { generateAppearance, generateHabitat, generatePersonality } from './generation';
 
 const HOUR_MS = 3_600_000;
 function minutes(time: string, fallback: number) { const [hour, minute] = time.split(':').map(Number); return Number.isFinite(hour) && Number.isFinite(minute) ? hour * 60 + minute : fallback; }
@@ -9,7 +9,7 @@ function scheduledSleep(date: Date, bedtime: string, wakeTime: string) { const n
 
 export function createPet(name: string, archetype: PetArchetype = 'dog', now = Date.now()): PetState {
   const generationSeed = (now ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
-  return { name: name.trim() || 'Mochi', age: 0, needs: { ...INITIAL_NEEDS }, health: INITIAL_HEALTH, isSleeping: false, schedule: { ...DEFAULT_SCHEDULE }, id: `${generationSeed.toString(16)}-${Math.random().toString(36).slice(2, 8)}`, generationSeed, archetype, appearance: generateAppearance(archetype, generationSeed), habitat: generateHabitat(archetype, generationSeed), lastUpdatedAt: now };
+  return { name: name.trim() || 'Mochi', age: 0, needs: { ...INITIAL_NEEDS }, health: INITIAL_HEALTH, isSleeping: false, schedule: { ...DEFAULT_SCHEDULE }, personality: generatePersonality(generationSeed), id: `${generationSeed.toString(16)}-${Math.random().toString(36).slice(2, 8)}`, generationSeed, archetype, appearance: generateAppearance(archetype, generationSeed), habitat: generateHabitat(archetype, generationSeed), lastUpdatedAt: now };
 }
 
 export function progressPet(pet: PetState, now = Date.now()): PetState {
