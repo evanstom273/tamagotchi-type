@@ -1,0 +1,1 @@
+export function Bed() { return <svg viewBox="0 0 120 60" aria-hidden="true"><path d="M8 24c0-9 8-16 18-16h68c10 0 18 7 18 16v20H8Z" fill="#da927a"/><ellipse cx="37" cy="23" rx="24" ry="12" fill="#f9cfb1"/><path d="M8 44h104" stroke="#b86b5c" strokeWidth="5" strokeLinecap="round"/></svg> }

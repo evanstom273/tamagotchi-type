@@ -1,0 +1,2 @@
+import type { Mood } from '../../types/pet';
+export function PetEffects({ mood }: { mood: Mood }) { if (mood === 'happy') return <g className="sparkles" fill="#ffd166"><path d="m66 82 4 11 11 4-11 4-4 11-4-11-11-4 11-4Z"/><path d="m236 94 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></g>; if (mood === 'unwell') return <path d="M225 70c0 0 8 9 0 17-8 8 0 17 0 17" fill="none" stroke="#8ecae6" strokeWidth="6" strokeLinecap="round"/>; return null; }

@@ -1,0 +1,1 @@
+export function ToyBox() { return <svg viewBox="0 0 100 70" aria-hidden="true"><path d="M10 26h80v34H10Z" fill="#e6a45c"/><path d="M6 26h88L84 12H16Z" fill="#f6c453"/><path d="M23 39h54" stroke="#b86b5c" strokeWidth="5" strokeLinecap="round"/></svg> }

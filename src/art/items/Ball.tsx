@@ -1,0 +1,1 @@
+export function Ball() { return <svg viewBox="0 0 50 50" aria-hidden="true"><circle cx="25" cy="25" r="20" fill="#f6c453" stroke="#e39c3e" strokeWidth="4"/><path d="M10 18c9 5 20 5 30 0" fill="none" stroke="#e39c3e" strokeWidth="3"/></svg> }

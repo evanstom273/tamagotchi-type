@@ -1,0 +1,1 @@
+export function FoodBowl() { return <svg viewBox="0 0 80 45" aria-hidden="true"><ellipse cx="40" cy="12" rx="25" ry="8" fill="#7c4b39"/><path d="M14 13h52l-7 23H21Z" fill="#e97860"/><path d="M19 36h42" stroke="#b9574c" strokeWidth="4" strokeLinecap="round"/></svg> }

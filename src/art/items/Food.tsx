@@ -1,0 +1,1 @@
+export function Food() { return <svg viewBox="0 0 50 50" aria-hidden="true"><path d="M10 31c2-17 28-22 30 0-3 10-27 10-30 0Z" fill="#7c4b39"/><path d="M17 22c4-7 12-8 17-2" fill="none" stroke="#a86d50" strokeWidth="4" strokeLinecap="round"/></svg> }

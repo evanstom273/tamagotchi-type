@@ -1,0 +1,1 @@
+export function EventMessage({ message }: { message: string }) { return <div className="event" aria-live="polite"><span className="event__line"/>{message || 'Your little companion is waiting for you.'}<span className="event__line"/></div> }
