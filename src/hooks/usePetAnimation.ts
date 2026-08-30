@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import type { PetAnimationState, PetBehavior, PetReaction, PetState } from '../types/pet';
 import { getMood } from '../game/personality';
 
+type AnimationRuntime = typeof globalThis & { __pocketPalsAnimation?: PetAnimationState; __pocketPalsMotionNonce?: number };
+export const animationRuntime = globalThis as AnimationRuntime;
+
 function moodAnimation(pet: PetState): PetAnimationState {
   const mood = getMood(pet);
   if (mood === 'tired') return 'tired';
@@ -24,6 +27,11 @@ export function usePetAnimation(pet: PetState | null, behavior: PetBehavior, rea
   const reactionNonce = reaction?.nonce ?? 0;
   const lastReaction = useRef(0);
   const reactionUntil = useRef(0);
+  // The renderer reads this tiny runtime bridge during the same render pass.
+  // oxlint-disable react(immutability)
+  Reflect.set(animationRuntime, '__pocketPalsAnimation', state);
+  Reflect.set(animationRuntime, '__pocketPalsMotionNonce', motionNonce);
+  // oxlint-enable react(immutability)
 
   useEffect(() => {
     if (!pet || !reaction || reaction.nonce === lastReaction.current) return;
