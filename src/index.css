@@ -1,3 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Nunito:wght@400;600;700;800;900&display=swap');
-:root { font-family: 'Nunito', sans-serif; color: #403234; background: #fbf6ee; font-synthesis: none; text-rendering: optimizeLegibility; }
+:root { font-family: 'Nunito', sans-serif; color: #403234; background: #fbf6ee; font-synthesis: none; text-rendering: optimizeLegibility; color-scheme: light; }
+:root[data-theme='dark'] { color: #f4e6d5; background: #292322; color-scheme: dark; }
+body { transition: background-color .35s ease, color .35s ease; }
 * { box-sizing: border-box; } body { margin: 0; min-width: 320px; } button, input { font: inherit; } button { cursor: pointer; }
