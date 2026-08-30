@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { feed, play, clean, toggleSleep } from '../game/actions';
 import { progressPet, createPet } from '../game/simulation';
-import type { PetArchetype, PetInteractionRegion, PetState } from '../types/pet';
+import type { PetAnimationState, PetArchetype, PetInteractionRegion, PetReaction, PetState } from '../types/pet';
 import { DEFAULT_SCHEDULE, INITIAL_HEALTH, INITIAL_NEEDS } from '../game/constants';
 import type { PetSchedule } from '../types/pet';
 import { generateAppearance, generateHabitat, generatePersonality } from '../game/generation';
@@ -42,6 +42,7 @@ export function usePet() {
     try { return progressPet(migratePet(JSON.parse(saved) as Partial<PetState> & Record<string, unknown>)); } catch { return null; }
   });
   const [message, setMessage] = useState('');
+  const [reaction, setReaction] = useState<PetReaction | null>(null);
   const interactionRef = useRef({ region: '' as PetInteractionRegion | '', at: 0, count: 0 });
 
   useEffect(() => { if (pet) localStorage.setItem(STORAGE_KEY, JSON.stringify(pet)); }, [pet]);
@@ -53,16 +54,18 @@ export function usePet() {
 
   const start = useCallback((name: string, archetype: PetArchetype) => { setPet(createPet(name, archetype)); setMessage(`Welcome home, ${name.trim() || 'Mochi'}!`); }, []);
   const adopt = useCallback((candidate: PetState) => { setPet(candidate); setMessage(`Welcome home, ${candidate.name}!`); }, []);
-  const act = useCallback((action: (state: PetState) => { state: PetState; message: string }) => setPet((current) => { if (!current) return current; const result = action(current); setMessage(result.message); return result.state; }), []);
+  const act = useCallback((action: (state: PetState) => { state: PetState; message: string }, animation: PetAnimationState) => setPet((current) => { if (!current) return current; const result = action(current); setReaction({ state: animation, nonce: Date.now() }); setMessage(result.message); return result.state; }), []);
   const setSchedule = useCallback((schedule: PetSchedule) => setPet((current) => current ? { ...current, schedule } : current), []);
   const interact = useCallback((region: PetInteractionRegion, gesture: 'tap' | 'stroke') => setPet((current) => {
     if (!current) return current;
     const now = Date.now(); const previous = interactionRef.current; const count = previous.region === region && now - previous.at < 1600 ? previous.count + 1 : 1; interactionRef.current = { region, at: now, count };
     const tolerance = current.personality?.touchTolerance ?? 60; const positive = region === 'head' || region === 'body' || region === 'core' || region === 'display' || region === 'shell' || region === 'cap'; const annoyed = count >= (tolerance > 65 ? 4 : 3) || (region === 'tail' || region === 'antenna') && count > 1;
     const delta = annoyed ? { affection: -2, fun: -1 } : positive ? { affection: gesture === 'stroke' ? 5 : 3, social: 2, fun: 1 } : { fun: 2 };
+    const interactionState: PetAnimationState = annoyed ? 'irritated' : gesture === 'stroke' ? 'interacting' : current.personality.mischief > 60 ? 'excited' : 'happy';
     const next = { ...current, needs: { ...current.needs, affection: Math.max(0, Math.min(100, current.needs.affection + (delta.affection ?? 0))), social: Math.max(0, Math.min(100, current.needs.social + (delta.social ?? 0))), fun: Math.max(0, Math.min(100, current.needs.fun + (delta.fun ?? 0))) }, isSleeping: current.isSleeping && !annoyed ? false : current.isSleeping, scheduleOverrideUntil: current.isSleeping && !annoyed ? now + 90 * 60_000 : current.scheduleOverrideUntil, lastUpdatedAt: now };
+    setReaction({ state: interactionState, nonce: now, region, gesture });
     setMessage(annoyed ? `${current.name} wriggled away from the repeated ${region} pokes.` : `${current.name} enjoyed that ${gesture === 'stroke' ? 'gentle stroke' : 'little tap'}.`);
     return next;
   }), []);
-  return { pet, message, start, adopt, feed: () => act(feed), play: () => act(play), clean: () => act(clean), toggleSleep: () => act(toggleSleep), setSchedule, interact };
+  return { pet, message, reaction, start, adopt, feed: () => act(feed, 'eating'), play: () => act(play, 'playing'), clean: () => act(clean, 'cleaning'), toggleSleep: () => act(toggleSleep, pet?.isSleeping ? 'waking' : 'going-to-sleep'), setSchedule, interact };
 }

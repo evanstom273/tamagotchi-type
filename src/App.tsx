@@ -12,13 +12,15 @@ import { useTheme } from './hooks/useTheme';
 import { useWorldLighting } from './hooks/useWorldLighting';
 import { getMood, moodCopy } from './game/personality';
 import { usePetBehavior } from './hooks/usePetBehavior';
+import { usePetAnimation } from './hooks/usePetAnimation';
 import './App.css';
 import './theme.css';
 import './responsive.css';
 
 function App() {
-  const { pet, message, adopt, feed, play, clean, toggleSleep, setSchedule, interact } = usePet();
+  const { pet, message, reaction, adopt, feed, play, clean, toggleSleep, setSchedule, interact } = usePet();
   const behavior = usePetBehavior(pet);
+  usePetAnimation(pet, behavior.behavior, reaction);
   const { preference, setPreference } = useTheme();
   const lighting = useWorldLighting();
   const [drawerOpen, setDrawerOpen] = useState(false);

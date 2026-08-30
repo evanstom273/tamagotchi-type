@@ -1,2 +1,2 @@
-import type { Mood } from '../../types/pet';
-export function PetEyes({ mood }: { mood: Mood }) { const sleepy = mood === 'tired'; return <g className="pet-eyes" fill="none" stroke="#4b3030" strokeWidth="7" strokeLinecap="round"><path d={sleepy ? 'M112 130l11 5 11-5' : 'M113 130v2'} /><path d={sleepy ? 'M177 130l11 5 11-5' : 'M178 130v2'} /></g> }
+import type { Mood, PetAnimationState } from '../../types/pet';
+export function PetEyes({ mood, animation = 'idle' }: { mood: Mood; animation?: PetAnimationState }) { const closed = mood === 'tired' || animation === 'sleeping' || animation === 'blink' || animation === 'yawning'; const look = animation === 'look' ? 5 : 0; return <g className="pet-eyes" fill="none" stroke="#4b3030" strokeWidth="7" strokeLinecap="round"><path d={closed ? 'M112 130l11 5 11-5' : `M113 ${130 + look}v2`} /><path d={closed ? 'M177 130l11 5 11-5' : `M178 ${130 - look}v2`} /></g> }
