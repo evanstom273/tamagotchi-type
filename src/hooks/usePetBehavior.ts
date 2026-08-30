@@ -17,7 +17,7 @@ function chooseDestination(pet: PetState) {
   return { target: choices[Math.floor(Math.random() * choices.length)], behavior: 'wandering' as PetBehavior };
 }
 
-export function usePetBehavior(pet: PetState | null) {
+export function usePetBehavior(pet: PetState | null, interactionAt?: number) {
   const [runtime, setRuntime] = useState<Runtime>(() => ({ petId: pet?.id, position: pet?.habitat.waypoints.idleArea ?? 50, target: pet?.habitat.waypoints.idleArea ?? 50, behavior: 'idle', pauseUntil: Date.now() + 1800 }));
   const petId = pet?.id;
   const petRef = useRef<PetState | null>(null);
@@ -28,6 +28,7 @@ export function usePetBehavior(pet: PetState | null) {
       const activePet = petRef.current;
       if (!activePet) return current;
       const now = Date.now();
+      if (interactionAt && now - interactionAt < 1250) return { ...current, pauseUntil: Math.max(current.pauseUntil, interactionAt + 1250) };
       if (current.petId !== activePet.id) return { petId: activePet.id, position: activePet.habitat.waypoints.idleArea, target: activePet.habitat.waypoints.idleArea, behavior: 'idle', pauseUntil: now + 1200 };
       if (activePet.isSleeping) return { petId: activePet.id, position: activePet.habitat.waypoints.sleepArea, target: activePet.habitat.waypoints.sleepArea, behavior: 'sleeping', pauseUntil: now + 1000 };
       if (now < current.pauseUntil) return current;
@@ -39,6 +40,6 @@ export function usePetBehavior(pet: PetState | null) {
       return { petId: activePet.id, position: current.position, target: destination.target, behavior: destination.behavior, pauseUntil: now + 1800 + Math.random() * 4200 };
     }), 700);
     return () => window.clearInterval(timer);
-  }, [petId]);
+  }, [interactionAt, petId]);
   return runtime;
 }

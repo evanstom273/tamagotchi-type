@@ -56,9 +56,9 @@ export function usePet() {
   const adopt = useCallback((candidate: PetState) => { setPet(candidate); setMessage(`Welcome home, ${candidate.name}!`); }, []);
   const act = useCallback((action: (state: PetState) => { state: PetState; message: string }, animation: PetAnimationState) => setPet((current) => { if (!current) return current; const result = action(current); setReaction({ state: animation, nonce: Date.now() }); setMessage(result.message); return result.state; }), []);
   const setSchedule = useCallback((schedule: PetSchedule) => setPet((current) => current ? { ...current, schedule } : current), []);
-  const interact = useCallback((region: PetInteractionRegion, gesture: 'tap' | 'stroke') => setPet((current) => {
+  const interact = useCallback((region: PetInteractionRegion, gesture: 'tap' | 'stroke', continuous = false) => setPet((current) => {
     if (!current) return current;
-    const now = Date.now(); const previous = interactionRef.current; const count = previous.region === region && now - previous.at < 1600 ? previous.count + 1 : 1; interactionRef.current = { region, at: now, count };
+    const now = Date.now(); const previous = interactionRef.current; const count = continuous ? previous.count : previous.region === region && now - previous.at < 1600 ? previous.count + 1 : 1; interactionRef.current = { region, at: now, count };
     const tolerance = current.personality?.touchTolerance ?? 60; const positive = region === 'head' || region === 'body' || region === 'core' || region === 'display' || region === 'shell' || region === 'cap'; const annoyed = count >= (tolerance > 65 ? 4 : 3) || (region === 'tail' || region === 'antenna') && count > 1;
     const delta = annoyed ? { affection: -2, fun: -1 } : positive ? { affection: gesture === 'stroke' ? 5 : 3, social: 2, fun: 1 } : { fun: 2 };
     const interactionState: PetAnimationState = annoyed ? 'irritated' : gesture === 'stroke' ? 'interacting' : current.personality.mischief > 60 ? 'excited' : 'happy';
