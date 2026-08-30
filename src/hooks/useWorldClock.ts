@@ -9,10 +9,11 @@ let sharedClock: StoredClock | null = null;
 const subscribers = new Set<(clock: StoredClock) => void>();
 let timer: number | undefined;
 const getSharedClock = () => sharedClock ?? (sharedClock = readClock());
-function publish(next: StoredClock) { sharedClock = next; localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); subscribers.forEach((listener) => listener(next)); }
+function publish(next: StoredClock, persist = true) { sharedClock = next; if (persist) localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); subscribers.forEach((listener) => listener(next)); }
 function startClock() {
   if (timer !== undefined) return;
-  timer = window.setInterval(() => { const current = getSharedClock(); const now = Date.now(); const elapsed = Math.max(0, now - current.lastRealTimestamp); const visibleMinutes = document.visibilityState === 'visible' ? elapsed * current.speed / WORLD_MINUTE_REAL_MS : elapsed / WORLD_MINUTE_REAL_MS; publish({ ...current, totalMinutes: current.totalMinutes + visibleMinutes, lastRealTimestamp: now }); }, 1_000);
+  let lastPersist = Date.now();
+  timer = window.setInterval(() => { const current = getSharedClock(); const now = Date.now(); const elapsed = Math.max(0, now - current.lastRealTimestamp); const visibleMinutes = document.visibilityState === 'visible' ? elapsed * current.speed / WORLD_MINUTE_REAL_MS : elapsed / WORLD_MINUTE_REAL_MS; const shouldPersist = now - lastPersist >= 1_000; if (shouldPersist) lastPersist = now; publish({ ...current, totalMinutes: current.totalMinutes + visibleMinutes, lastRealTimestamp: now }, shouldPersist); }, 100);
 }
 
 function validSpeed(value: unknown): SimulationSpeed { return value === 2 || value === 4 || value === 8 ? value : 1; }
