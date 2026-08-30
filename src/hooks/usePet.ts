@@ -5,6 +5,8 @@ import type { PetAnimationState, PetArchetype, PetInteractionRegion, PetReaction
 import { DEFAULT_SCHEDULE, INITIAL_HEALTH, INITIAL_NEEDS } from '../game/constants';
 import type { PetSchedule } from '../types/pet';
 import { generateAppearance, generateHabitat, generatePersonality } from '../game/generation';
+import { getPersistedWorldMinutes } from './useWorldClock';
+import type { SimulationSpeed } from '../types/world';
 
 const STORAGE_KEY = 'pocket-pals-pet-v1';
 
@@ -35,11 +37,11 @@ function migratePet(saved: Partial<PetState> & Record<string, unknown>): PetStat
   };
 }
 
-export function usePet() {
+export function usePet(worldMinutes = getPersistedWorldMinutes(), speed: SimulationSpeed = 1) {
   const [pet, setPet] = useState<PetState | null>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return null;
-    try { return progressPet(migratePet(JSON.parse(saved) as Partial<PetState> & Record<string, unknown>)); } catch { return null; }
+    try { return progressPet(migratePet(JSON.parse(saved) as Partial<PetState> & Record<string, unknown>), Date.now(), 1, getPersistedWorldMinutes()); } catch { return null; }
   });
   const [message, setMessage] = useState('');
   const [reaction, setReaction] = useState<PetReaction | null>(null);
@@ -48,13 +50,13 @@ export function usePet() {
   useEffect(() => { if (pet) localStorage.setItem(STORAGE_KEY, JSON.stringify(pet)); }, [pet]);
   useEffect(() => {
     if (!pet) return;
-    const interval = window.setInterval(() => setPet((current) => current ? progressPet(current) : current), 60_000);
+    const interval = window.setInterval(() => setPet((current) => current ? progressPet(current, Date.now(), speed, worldMinutes) : current), 1_000);
     return () => window.clearInterval(interval);
-  }, [pet]);
+  }, [pet, speed, worldMinutes]);
 
   const start = useCallback((name: string, archetype: PetArchetype) => { setPet(createPet(name, archetype)); setMessage(`Welcome home, ${name.trim() || 'Mochi'}!`); }, []);
   const adopt = useCallback((candidate: PetState) => { setPet(candidate); setMessage(`Welcome home, ${candidate.name}!`); }, []);
-  const act = useCallback((action: (state: PetState) => { state: PetState; message: string }, animation: PetAnimationState) => setPet((current) => { if (!current) return current; const result = action(current); setReaction({ state: animation, nonce: Date.now() }); setMessage(result.message); return result.state; }), []);
+  const act = useCallback((action: (state: PetState, now: number, scale: SimulationSpeed, worldTime: number) => { state: PetState; message: string }, animation: PetAnimationState) => setPet((current) => { if (!current) return current; const now = Date.now(); const result = action(current, now, speed, worldMinutes); setReaction({ state: animation, nonce: now }); setMessage(result.message); return result.state; }), [speed, worldMinutes]);
   const setSchedule = useCallback((schedule: PetSchedule) => setPet((current) => current ? { ...current, schedule } : current), []);
   const interact = useCallback((region: PetInteractionRegion, gesture: 'tap' | 'stroke', continuous = false) => setPet((current) => {
     if (!current) return current;

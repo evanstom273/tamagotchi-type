@@ -13,16 +13,18 @@ import { useWorldLighting } from './hooks/useWorldLighting';
 import { getMood, moodCopy } from './game/personality';
 import { usePetBehavior } from './hooks/usePetBehavior';
 import { usePetAnimation } from './hooks/usePetAnimation';
+import { useWorldClock } from './hooks/useWorldClock';
 import './App.css';
 import './theme.css';
 import './responsive.css';
 
 function App() {
-  const { pet, message, reaction, adopt, feed, play, clean, toggleSleep, setSchedule, interact } = usePet();
-  const behavior = usePetBehavior(pet, reaction?.nonce);
+  const worldClock = useWorldClock();
+  const { pet, message, reaction, adopt, feed, play, clean, toggleSleep, setSchedule, interact } = usePet(worldClock.totalMinutes, worldClock.speed);
+  const behavior = usePetBehavior(pet, reaction?.nonce, worldClock.speed);
   usePetAnimation(pet, behavior.behavior, reaction);
   const { preference, setPreference } = useTheme();
-  const lighting = useWorldLighting();
+  const lighting = useWorldLighting(worldClock.totalMinutes);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [newPalOpen, setNewPalOpen] = useState(false);
   const [clock, setClock] = useState(() => new Date());

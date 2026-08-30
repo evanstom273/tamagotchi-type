@@ -17,7 +17,7 @@ function chooseDestination(pet: PetState) {
   return { target: choices[Math.floor(Math.random() * choices.length)], behavior: 'wandering' as PetBehavior };
 }
 
-export function usePetBehavior(pet: PetState | null, interactionAt?: number) {
+export function usePetBehavior(pet: PetState | null, interactionAt?: number, speed = 1) {
   const [runtime, setRuntime] = useState<Runtime>(() => ({ petId: pet?.id, position: pet?.habitat.waypoints.idleArea ?? 50, target: pet?.habitat.waypoints.idleArea ?? 50, behavior: 'idle', pauseUntil: Date.now() + 1800 }));
   const petId = pet?.id;
   const petRef = useRef<PetState | null>(null);
@@ -34,12 +34,12 @@ export function usePetBehavior(pet: PetState | null, interactionAt?: number) {
       if (now < current.pauseUntil) return current;
       if (Math.abs(current.target - current.position) > 1.5) {
         const direction = current.target > current.position ? 1 : -1;
-        return { ...current, position: current.position + direction * Math.min(4, Math.abs(current.target - current.position)), behavior: current.behavior === 'idle' ? 'wandering' : current.behavior };
+        return { ...current, position: current.position + direction * Math.min(4 * speed, Math.abs(current.target - current.position)), behavior: current.behavior === 'idle' ? 'wandering' : current.behavior };
       }
       const destination = chooseDestination(activePet);
-      return { petId: activePet.id, position: current.position, target: destination.target, behavior: destination.behavior, pauseUntil: now + 1800 + Math.random() * 4200 };
+      return { petId: activePet.id, position: current.position, target: destination.target, behavior: destination.behavior, pauseUntil: now + (1800 + Math.random() * 4200) / speed };
     }), 700);
     return () => window.clearInterval(timer);
-  }, [interactionAt, petId]);
+  }, [interactionAt, petId, speed]);
   return runtime;
 }
