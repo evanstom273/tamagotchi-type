@@ -49,7 +49,8 @@ export function usePet() {
   }, [pet]);
 
   const start = useCallback((name: string, archetype: PetArchetype) => { setPet(createPet(name, archetype)); setMessage(`Welcome home, ${name.trim() || 'Mochi'}!`); }, []);
+  const adopt = useCallback((candidate: PetState) => { setPet(candidate); setMessage(`Welcome home, ${candidate.name}!`); }, []);
   const act = useCallback((action: (state: PetState) => { state: PetState; message: string }) => setPet((current) => { if (!current) return current; const result = action(current); setMessage(result.message); return result.state; }), []);
   const setSchedule = useCallback((schedule: PetSchedule) => setPet((current) => current ? { ...current, schedule } : current), []);
-  return { pet, message, start, feed: () => act(feed), play: () => act(play), clean: () => act(clean), toggleSleep: () => act(toggleSleep), setSchedule };
+  return { pet, message, start, adopt, feed: () => act(feed), play: () => act(play), clean: () => act(clean), toggleSleep: () => act(toggleSleep), setSchedule };
 }
