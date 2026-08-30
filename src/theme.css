@@ -7,6 +7,15 @@
 :root[data-theme='dark'] .game-drawer { background:#30312f; }
 :root[data-theme='dark'] .name-input button { background:#ead9c7; color:#382d2c; }
 :root[data-theme='dark'] .name-input input { color:var(--ink); }
+:root[data-theme='dark'] .new-pal-backdrop { background:rgba(36,37,35,.94); }
+:root[data-theme='dark'] .new-pal-card { background:#30312f; border-color:rgba(235,218,202,.22); box-shadow:0 20px 60px rgba(20,20,18,.4); }
+:root[data-theme='dark'] .new-pal-card input { background:#3b3c39; color:var(--ink); border-color:rgba(235,218,202,.2); }
+:root[data-theme='dark'] .new-pal-card input::placeholder { color:#927f76; }
+:root[data-theme='dark'] .archetype-picker button { color:#bba69b; }
+:root[data-theme='dark'] .archetype-picker button:hover,:root[data-theme='dark'] .archetype-picker button.is-selected { background:rgba(240,149,120,.14); border-color:var(--coral); color:var(--ink); }
+:root[data-theme='dark'] .reveal-secondary { background:#3b3c39; border-color:rgba(235,218,202,.22); color:var(--ink); }
+:root[data-theme='dark'] .reveal-secondary:hover { background:#454743; }
+:root[data-theme='dark'] .reveal-adopt { color:#2f302e; }
 .theme-control { position:relative; }
 .theme-control__button { width:30px; height:30px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; background:transparent; color:var(--ink); padding:5px; }
 .theme-control__button svg { width:16px; height:16px; }
